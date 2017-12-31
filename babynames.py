@@ -48,6 +48,20 @@ def extract_names(filename):
                            string=file_contents)
     year = year_match.group('year')
 
+    name_pattern = ('<td>(?P<rank>\d+)</td><td>'
+                    '(?P<boy_name>[A-Z][a-z]+)</td>'
+                    '<td>(?P<girl_name>[A-Z][a-z]+)</td>')
+    names_match = re.findall(pattern=name_pattern, string=file_contents)
+    ranks = {}
+    for rank, boy_name, girl_name in names_match:
+        rank = int(rank)
+        # Names can be boy names and girl names at the same time
+        # Want to make entries of rank unique, and choose the smallest rank
+        if boy_name not in ranks or rank < ranks[boy_name]:
+            ranks[boy_name] = rank
+        if girl_name not in ranks or rank < ranks[girl_name]:
+            ranks[girl_name] = rank
+
     return [year]
 
 
