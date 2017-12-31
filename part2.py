@@ -76,6 +76,14 @@ def get_subject_data(fraud_email):
 
     return {'subject': subject}
 
+
+def get_email_body(fraud_email):
+    """Return a dictionary with the email body for the email."""
+    full_email = email_message_from_string(fraud_email)
+    body = full_email.get_payload()
+    return {'email_body': body}
+
+
 if __name__ == '__main__':
     email_data = []
 
@@ -87,7 +95,6 @@ if __name__ == '__main__':
 
     for fraud_email in emails:
         data = {}
-        for fn in (get_sender_data, get_recipient_data,
-                   get_date_sent_data, get_subject_data):
+        for fn in (get_sender_data, get_recipient_data, get_date_sent_data,
+                   get_subject_data, get_email_body):
             data.update(fn(fraud_email))
-        print(data)
