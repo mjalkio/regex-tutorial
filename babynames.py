@@ -43,7 +43,12 @@ def extract_names(filename):
     """
     with open(filename) as f:
         file_contents = f.read()
-    return []
+
+    year_match = re.search(pattern='Popularity in (?P<year>\d+)',
+                           string=file_contents)
+    year = year_match.group('year')
+
+    return [year]
 
 
 def main():
