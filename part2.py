@@ -84,6 +84,12 @@ def get_email_body(fraud_email):
     return {'email_body': body}
 
 
+def get_emails_from_domains(emails_df, domains):
+    """Return subset of emails_df where the sender's domain is in domains."""
+    # The bar is a regex "OR"
+    domains = '|'.join(domains)
+    return emails_df[emails_df['sender_email'].str.contains(domains)]
+
 if __name__ == '__main__':
     email_data = []
 
@@ -98,3 +104,10 @@ if __name__ == '__main__':
         for fn in (get_sender_data, get_recipient_data, get_date_sent_data,
                    get_subject_data, get_email_body):
             data.update(fn(fraud_email))
+        email_data.append(data)
+
+    emails_df = pd.DataFrame(email_data)
+
+    print(emails_df.head(n=3))
+    print(get_emails_from_domains(emails_df=emails_df,
+                                  domains=['maktoob', 'spinfinder']))
