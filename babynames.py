@@ -62,7 +62,11 @@ def extract_names(filename):
         if girl_name not in ranks or rank < ranks[girl_name]:
             ranks[girl_name] = rank
 
-    return [year]
+    output = [year]
+    for name, rank in sorted(ranks.items()):
+        output.append("{name} {rank}".format(name=name, rank=rank))
+
+    return output
 
 
 def main():
