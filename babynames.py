@@ -71,7 +71,14 @@ def extract_names(filename):
 
 def main():
     """Run the code (previously did command line parsing...I removed that."""
-    extracted_names = extract_names('baby1990.html')
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description='Parse the file and print baby name popularity data.')
+    parser.add_argument('--filename', default='baby1990.html')
+    args = parser.parse_args()
+
+    extracted_names = extract_names(filename=args.filename)
     print('\n'.join(extracted_names))
 
 if __name__ == '__main__':
