@@ -53,9 +53,28 @@ def get_recipient_data(fraud_email):
     }
 
 
-def get_date_data(fraud_email):
+def get_date_sent_data(fraud_email):
     """Return a dictionary with the date data for the email."""
-    return {}
+    date = re.search(r"Date:.*", fraud_email)
+    if date is not None:
+        # \d is any decimal digit
+        # + matches 1 or more of the preceding regex
+        # 1+ digit, one whitespace, 1+ alphanumeric, one whitespace, 1+ digit
+        date = re.search(r"\d+\s\w+\s\d+", date.group())
+        if date is not None:
+            date = date.group()
+
+    return {'date_sent': date}
+
+
+def get_subject_data(fraud_email):
+    """Return a dictionary with the subject data for the email."""
+    subject = re.search(r"Subject: .*", fraud_email)
+
+    if subject is not None:
+        subject = re.sub(r"Subject: ", "", subject.group())
+
+    return {'subject': subject}
 
 if __name__ == '__main__':
     email_data = []
@@ -68,6 +87,7 @@ if __name__ == '__main__':
 
     for fraud_email in emails:
         data = {}
-        for fn in (get_sender_data, get_recipient_data, get_date_data):
+        for fn in (get_sender_data, get_recipient_data,
+                   get_date_sent_data, get_subject_data):
             data.update(fn(fraud_email))
         print(data)
